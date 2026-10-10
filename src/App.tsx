@@ -1,48 +1,46 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import logoRaw from "@/assets/avatar-school-logo.png";
-import dinheiroRaw from "@/assets/dinheiro-plataformas-1200.webp";
-import eggmanRaw from "@/assets/turma-eggman.webp";
-import edmondRaw from "@/assets/turma-edmond-lebon.webp";
-import billRaw from "@/assets/turma-bill-smith.webp";
-import jeenRaw from "@/assets/turma-jeen-rockfelly.webp";
-import kwonRaw from "@/assets/turma-kwon-blaze-kim.webp";
-import jeanphilRaw from "@/assets/turma-jean-phil.webp";
-import arthurRaw from "@/assets/turma-arthur-teddington.webp";
-import sebastianRaw from "@/assets/turma-sebastian-perfil.webp";
-import silkyRaw from "@/assets/turma-silky.webp";
-import miltonRaw from "@/assets/turma-milton-bumford.webp";
-import abuRaw from "@/assets/turma-abu-shalab.webp";
-import barnabyRaw from "@/assets/turma-barnaby-nugget.webp";
-import reelAbuRaw from "@/assets/reel-abu-shalab.mp4";
-import reelJeanRaw from "@/assets/reel-jean-philanthrope.mp4";
-import reelFarquaadRaw from "@/assets/reel-lord-farquaad.mp4";
-import proAvatarRaw from "@/assets/pro-avatar.webp";
-import depoLucasRaw from "@/assets/depo-lucas-en-420.webp";
-import depoFelipeRaw from "@/assets/depo-felipe-en-420.webp";
-import depoAndreRaw from "@/assets/depo-andre-en-420.webp";
-
 const logo = { url: logoRaw };
+import dinheiroRaw from "@/assets/dinheiro-plataformas-1200.webp";
 const dinheiro = { url: dinheiroRaw };
+import eggmanRaw from "@/assets/turma-eggman.webp";
 const eggman = { url: eggmanRaw };
+import edmondRaw from "@/assets/turma-edmond-lebon.webp";
 const edmond = { url: edmondRaw };
+import billRaw from "@/assets/turma-bill-smith.webp";
 const bill = { url: billRaw };
+import jeenRaw from "@/assets/turma-jeen-rockfelly.webp";
 const jeen = { url: jeenRaw };
+import kwonRaw from "@/assets/turma-kwon-blaze-kim.webp";
 const kwon = { url: kwonRaw };
+import jeanphilRaw from "@/assets/turma-jean-phil.webp";
 const jeanphil = { url: jeanphilRaw };
+import arthurRaw from "@/assets/turma-arthur-teddington.webp";
 const arthur = { url: arthurRaw };
+import sebastianRaw from "@/assets/turma-sebastian-perfil.webp";
 const sebastian = { url: sebastianRaw };
+import silkyRaw from "@/assets/turma-silky.webp";
 const silky = { url: silkyRaw };
+import miltonRaw from "@/assets/turma-milton-bumford.webp";
 const milton = { url: miltonRaw };
+import abuRaw from "@/assets/turma-abu-shalab.webp";
 const abu = { url: abuRaw };
+import barnabyRaw from "@/assets/turma-barnaby-nugget.webp";
 const barnaby = { url: barnabyRaw };
+import reelAbuRaw from "@/assets/reel-abu-shalab.mp4";
 const reelAbu = { url: reelAbuRaw };
+import reelJeanRaw from "@/assets/reel-jean-philanthrope.mp4";
 const reelJean = { url: reelJeanRaw };
+import reelFarquaadRaw from "@/assets/reel-lord-farquaad.mp4";
 const reelFarquaad = { url: reelFarquaadRaw };
+import proAvatarRaw from "@/assets/pro-avatar.webp";
 const proAvatar = { url: proAvatarRaw };
+import depoLucasRaw from "@/assets/depo-lucas-en-420.webp";
 const depoLucas = { url: depoLucasRaw };
+import depoFelipeRaw from "@/assets/depo-felipe-en-420.webp";
 const depoFelipe = { url: depoFelipeRaw };
+import depoAndreRaw from "@/assets/depo-andre-en-420.webp";
 const depoAndre = { url: depoAndreRaw };
-
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 
@@ -843,8 +841,12 @@ function ExitOffer() {
       } catch { /* noop */ }
     };
 
-    const onPop = () => {
+    const onPop = (e: PopStateEvent) => {
       if (cancelled || !pushed) return;
+      // Só abre quando o histórico realmente voltou para a entrada da armadilha.
+      // A navegação por âncora (ex.: href="#pricing") também dispara popstate,
+      // mas com state nulo — essa não é uma tentativa de sair.
+      if (!e.state || (e.state as { exitOffer?: boolean }).exitOffer !== true) return;
       pushed = false;
       open();
       // Rearma para o caso de a pessoa fechar a oferta e tentar voltar de novo.
